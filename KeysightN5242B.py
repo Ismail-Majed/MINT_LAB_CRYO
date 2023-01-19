@@ -6,7 +6,32 @@ import os
 
 
 
-def initPNA(calSetID):
+# def initPNA(calSetID):
+# 	resource_name = "USB0::0x2A8D::0x2B01::MY48420967::0::INSTR"
+# 	id_query = True
+# 	reset = False
+# 	options = ""
+# 	driver = inst.KtNA(resource_name, id_query, reset, options)
+
+
+# 	print('  identifier: ', driver.identity.identifier)
+# 	print('  revision:   ', driver.identity.revision)
+# 	print('  vendor:     ', driver.identity.vendor)
+# 	print('  description:', driver.identity.description)
+# 	print('  model:      ', driver.identity.instrument_model)
+# 	print('  resource:   ', driver.driver_operation.io_resource_descriptor)
+# 	print('  options:    ', driver.driver_operation.driver_setup)
+
+# 	print("\n")
+# 	print("Basic Operations using IVI Native Commands")
+
+	
+# 	driver.system.factory_preset()
+# 	driver.channels[0].apply_cal_set(calSetID, True)
+
+
+
+def measSparam(temp, kind):
 	resource_name = "USB0::0x2A8D::0x2B01::MY48420967::0::INSTR"
 	id_query = True
 	reset = False
@@ -24,16 +49,7 @@ def initPNA(calSetID):
 
 	print("\n")
 	print("Basic Operations using IVI Native Commands")
-
-	
-	driver.system.factory_preset()
-	driver.channels[0].apply_cal_set(calSetID, True)
-
-
-
-def measSparam(temp, kind):
-
-	driver.channels.delete_all_measurements()
+	driver.utility.reset()
 
 	driver.display.windows.create_or_delete(True, 1)
 	driver.display.windows.create_or_delete(True, 2)
@@ -54,6 +70,7 @@ def measSparam(temp, kind):
 	driver.channels.add_measurement("S22", 4, 1) #Create a new Measurement
 	driver.display.windows[3].traces.feed_measurement_number(4, 1) #Feed that measurement to a new trace
 
+	driver.channels[0].apply_cal_set(calSetID, True)
 	driver.status.operation.enable_register = inst.StatusOperationFlags.AVERAGING_SUMMARY	
 	driver.status.service_request_enable_register = inst.StatusByteFlags.OPERATION_SUMMARY
 	driver.status.clear()
@@ -70,7 +87,7 @@ def measSparam(temp, kind):
 	while 1:
 		time.sleep(1)
 		status_byte = int(driver.status.read_status_byte_register())
-		if(status_byte == 192)
+		if(status_byte == 192):
 			break
 		pass
 		
@@ -88,8 +105,26 @@ def measSparam(temp, kind):
 
 
 def measNoiseParam(temp, kind):
+		resource_name = "USB0::0x2A8D::0x2B01::MY48420967::0::INSTR"
+	id_query = True
+	reset = False
+	options = ""
+	driver = inst.KtNA(resource_name, id_query, reset, options)
 
-	driver.channels.delete_all_measurements()
+
+	print('  identifier: ', driver.identity.identifier)
+	print('  revision:   ', driver.identity.revision)
+	print('  vendor:     ', driver.identity.vendor)
+	print('  description:', driver.identity.description)
+	print('  model:      ', driver.identity.instrument_model)
+	print('  resource:   ', driver.driver_operation.io_resource_descriptor)
+	print('  options:    ', driver.driver_operation.driver_setup)
+
+	print("\n")
+	print("Basic Operations using IVI Native Commands")
+
+	
+	driver.utility.reset()
 
 	driver.display.windows.create_or_delete(True, 1)
 	driver.display.windows.create_or_delete(True, 2)
@@ -108,7 +143,8 @@ def measNoiseParam(temp, kind):
 
 	driver.channels.add_measurement("SYSNPDI", 4, 1) #Create a new Measurement
 	driver.display.windows[3].traces.feed_measurement_number(4, 1) #Feed that measurement to a new trace
-
+	
+	driver.channels[0].apply_cal_set(calSetID, True)
 	driver.status.operation.enable_register = inst.StatusOperationFlags.AVERAGING_SUMMARY	
 	driver.status.service_request_enable_register = inst.StatusByteFlags.OPERATION_SUMMARY
 	driver.status.clear()
@@ -124,7 +160,7 @@ def measNoiseParam(temp, kind):
 	while 1:
 		time.sleep(1)
 		status_byte = int(driver.status.read_status_byte_register())
-		if(status_byte == 192)
+		if(status_byte == 192):
 			break
 		pass
 	
