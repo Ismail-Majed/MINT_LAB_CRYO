@@ -49,7 +49,7 @@ def measSparam(temp, kind):
 
 	print("\n")
 	print("Basic Operations using IVI Native Commands")
-	driver.utility.reset()
+	driver.system.factory_preset()
 
 	driver.display.windows.create_or_delete(True, 1)
 	driver.display.windows.create_or_delete(True, 2)
@@ -70,7 +70,7 @@ def measSparam(temp, kind):
 	driver.channels.add_measurement("S22", 4, 1) #Create a new Measurement
 	driver.display.windows[3].traces.feed_measurement_number(4, 1) #Feed that measurement to a new trace
 
-	driver.channels[0].apply_cal_set(calSetID, True)
+	driver.channels[0].apply_cal_set("Low_power_1port_Jan_2023", True)
 	driver.status.operation.enable_register = inst.StatusOperationFlags.AVERAGING_SUMMARY	
 	driver.status.service_request_enable_register = inst.StatusByteFlags.OPERATION_SUMMARY
 	driver.status.clear()
@@ -98,14 +98,14 @@ def measSparam(temp, kind):
 	driver.system.wait_for_operation_complete(datetime.timedelta(seconds = 10))
 	# #driver.memory.save_trace_data("./NoiseParams/NoiseParam{}k.csv".format(temp),inst.keysight_ktna.TraceDataFileType.CSV_FORMATTED_DATA,inst.keysight_ktna.DataScope.TRACE,inst.keysight_ktna.DataFormat.RI,1)	
 	driver.channels[0].measurements[0].save_snp_data("1 2", "./S-params/S-ParamMeas{}k.s2p".format(temp))
-	driver.memory.upload_data("./S-params/S-ParamMeas{}k.s2p".format(temp),"C:/Users/labuser/Documents/LabSetup/Results/{}/S-ParamMeas{}k_{}.s2p".format(kind,temp,kind))
+	driver.memory.upload_data("./S-params/S-ParamMeas{}k.s2p".format(temp),"C:/Users/labuser/Documents/CryoMeasurement/MINT_LAB_CRYO/Results/{}/S-ParamMeas{}k_{}.s2p".format(kind,temp,kind))
 	#driver.memory.upload_data("./NoiseParams/NoiseParam{}k.csv".format(temp), "C:/Users/labuser/Documents/LabSetup/Results/{}/NoiseParam{}k_{}.csv".format(kind,temp,kind))
 	driver.system.wait_for_operation_complete(datetime.timedelta(seconds = 100))
 
 
 
 def measNoiseParam(temp, kind):
-		resource_name = "USB0::0x2A8D::0x2B01::MY48420967::0::INSTR"
+	resource_name = "USB0::0x2A8D::0x2B01::MY48420967::0::INSTR"
 	id_query = True
 	reset = False
 	options = ""
@@ -124,27 +124,28 @@ def measNoiseParam(temp, kind):
 	print("Basic Operations using IVI Native Commands")
 
 	
-	driver.utility.reset()
+	#driver.utility.reset()
+	driver.system.factory_preset()
 
 	driver.display.windows.create_or_delete(True, 1)
-	driver.display.windows.create_or_delete(True, 2)
-	driver.display.windows.create_or_delete(True, 3)
-	driver.display.windows.create_or_delete(True, 4)
+	# driver.display.windows.create_or_delete(True, 2)
+	# driver.display.windows.create_or_delete(True, 3)
+	# driver.display.windows.create_or_delete(True, 4)
 
-	driver.channels.add_measurement("DUTNPD", 1, 1)
+	driver.channels.add_measurement("B_1:Noise Figure Cold Source", 1, 1)
 	driver.display.windows[0].traces.feed_measurement_number(1, 1)
 
 	# # Create 2nd Measurement
-	driver.channels.add_measurement("DUTNPDI", 2, 1)
-	driver.display.windows[1].traces.feed_measurement_number(2, 1)
+	# driver.channels.add_measurement("DUTNPDI:Noise Figure Cold Source", 2, 1)
+	# driver.display.windows[1].traces.feed_measurement_number(2, 1)
 
-	driver.channels.add_measurement("SYSNPD", 3, 1) #Create a new Measurement
-	driver.display.windows[2].traces.feed_measurement_number(3, 1) #Feed that measurement to a new trace
+	# driver.channels.add_measurement("SYSNPD:Noise Figure Cold Source", 3, 1) #Create a new Measurement
+	# driver.display.windows[2].traces.feed_measurement_number(3, 1) #Feed that measurement to a new trace
 
-	driver.channels.add_measurement("SYSNPDI", 4, 1) #Create a new Measurement
-	driver.display.windows[3].traces.feed_measurement_number(4, 1) #Feed that measurement to a new trace
+	# driver.channels.add_measurement("SYSNPDI:Noise Figure Cold Source", 4, 1) #Create a new Measurement
+	# driver.display.windows[3].traces.feed_measurement_number(4, 1) #Feed that measurement to a new trace
 	
-	driver.channels[0].apply_cal_set(calSetID, True)
+	#driver.channels[0].apply_cal_set("Low_power_1port_Jan_2023", True)
 	driver.status.operation.enable_register = inst.StatusOperationFlags.AVERAGING_SUMMARY	
 	driver.status.service_request_enable_register = inst.StatusByteFlags.OPERATION_SUMMARY
 	driver.status.clear()
@@ -164,7 +165,13 @@ def measNoiseParam(temp, kind):
 			break
 		pass
 	
-	driver.memory.save_trace_data("./NoiseParams/NoiseParam{}k.csv".format(temp),inst.keysight_ktna.TraceDataFileType.CSV_FORMATTED_DATA,inst.keysight_ktna.DataScope.TRACE,inst.keysight_ktna.DataFormat.RI,1)
-	driver.system.wait_for_operation_complete(datetime.timedelta(seconds = 10))
-	driver.memory.upload_data("./NoiseParams/NoiseParam{}k.csv".format(temp), "C:/Users/labuser/Documents/LabSetup/Results/{}/NoiseParam{}k_{}.csv".format(kind,temp,kind))
+	driver.memory.save_trace_data("./NoiseParams/NoiseParam{}k_DUTNPD.csv".format(temp),inst.keysight_ktna.TraceDataFileType.CSV_FORMATTED_DATA,inst.keysight_ktna.DataScope.TRACE,inst.keysight_ktna.DataFormat.RI,1)
+	# driver.memory.save_trace_data("./NoiseParams/NoiseParam{}k_DUTNPDI.csv".format(temp),inst.keysight_ktna.TraceDataFileType.CSV_FORMATTED_DATA,inst.keysight_ktna.DataScope.TRACE,inst.keysight_ktna.DataFormat.RI,2)
+	# driver.memory.save_trace_data("./NoiseParams/NoiseParam{}k_SYSNPD.csv".format(temp),inst.keysight_ktna.TraceDataFileType.CSV_FORMATTED_DATA,inst.keysight_ktna.DataScope.TRACE,inst.keysight_ktna.DataFormat.RI,3)
+	# driver.memory.save_trace_data("./NoiseParams/NoiseParam{}k_SYSNPDI.csv".format(temp),inst.keysight_ktna.TraceDataFileType.CSV_FORMATTED_DATA,inst.keysight_ktna.DataScope.TRACE,inst.keysight_ktna.DataFormat.RI,4)
+	driver.system.wait_for_operation_complete(datetime.timedelta(seconds = 100))
+	driver.memory.upload_data("./NoiseParams/NoiseParam{}k_DUTNPD.csv".format(temp), "C:/Users/labuser/Documents/CryoMeasurement/MINT_LAB_CRYO/Results/{}/NoiseParam{}k_{}.csv".format(kind,temp,"DUTNPD"))
+	# driver.memory.upload_data("./NoiseParams/NoiseParam{}k_DUTNPDI.csv".format(temp), "C:/Users/labuser/Documents/CryoMeasurement/MINT_LAB_CRYO/Results/{}/NoiseParam{}k_{}.csv".format(kind,temp,"DUTNPDI"))
+	# driver.memory.upload_data("./NoiseParams/NoiseParam{}k_SYSNPD.csv".format(temp), "C:/Users/labuser/Documents/CryoMeasurement/MINT_LAB_CRYO/Results/{}/NoiseParam{}k_{}.csv".format(kind,temp,"SYSNPD"))
+	# driver.memory.upload_data("./NoiseParams/NoiseParam{}k_SYSNPDI.csv".format(temp), "C:/Users/labuser/Documents/CryoMeasurement/MINT_LAB_CRYO/Results/{}/NoiseParam{}k_{}.csv".format(kind,temp,"SYSNPDI"))
 	driver.system.wait_for_operation_complete(datetime.timedelta(seconds = 100))
