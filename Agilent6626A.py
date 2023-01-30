@@ -28,3 +28,28 @@ def setOutputIV(outputNumber, voltage, current):
 	print("Current limit on output {} has been changed to {}A".format(outputNumber,current))
 	print("Voltage on output {} has been changed to {}V".format(outputNumber,voltage))	
 
+def setStateANoAtten():
+	setOutputIV(2, 3.3, 0.1) #VDD
+	setOutputIV(1, 0, 0.1) #sw1
+	setOutputIV(4, 3.3, 0.1) #sw2
+	setOutputIV(3, 0, 0.1) #atten
+def setStateAWithAtten():
+	setOutputIV(2, 3.3, 0.1) #VDD
+	setOutputIV(1, 0, 0.1) #sw1
+	setOutputIV(4, 3.3, 0.1) #sw2
+	setOutputIV(3, 3.3, 0.1) #atten
+def setStateB():
+	setOutputIV(2, 3.3, 0.1) #VDD
+	setOutputIV(1, 3.3, 0.1) #sw1
+	setOutputIV(4, 3.3, 0.1) #sw2
+	setOutputIV(3, 0, 0.1) #atten
+def setStateC():
+	setOutputIV(2, 3.3, 0.1) #VDD
+	setOutputIV(1, 0, 0.1) #sw1
+	setOutputIV(4, 0, 0.1) #sw2
+	setOutputIV(3, 0, 0.1) #atten
+def setStateD():
+	setOutputIV(2, 3.3, 0.1) #VDD
+	setOutputIV(1, 3.3, 0.1) #sw1
+	setOutputIV(4, 0, 0.1) #sw2
+	setOutputIV(3, 0, 0.1) #atten
