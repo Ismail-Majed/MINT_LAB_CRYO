@@ -17,6 +17,9 @@ TRL= TRL(measured = [T, R, L])
 #error_network_in = TRL.error_ntwk[0]
 error_network_out = TRL.error_ntwk[1]
 error_network_out.plot_s_db()
+#ask leo if ignore s22
+Gave_out=error_network_out.s[:,1,0]**2
+print(Gave_out)
 #error_network_in.plot_s_db()
 
 
